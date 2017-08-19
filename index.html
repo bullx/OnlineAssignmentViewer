@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css" rel="stylesheet">
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">
+    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/docs.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" >
+
+
+    <script src="//cdn.jsdelivr.net/angularjs/1.5.5/angular.min.js" data-semver="1.5.5"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+    <script src="//cdn.jsdelivr.net/angularjs/1.5.5/angular-animate.min.js" data-semver="1.5.5"></script>
+    <script src="//cdn.jsdelivr.net/angularjs/1.5.5/angular-sanitize.min.js" data-semver="1.5.5"></script>
+    <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.js" data-semver="v2.3.8"></script>
+    <script src="//mgcrea.github.io/angular-strap/dist/angular-strap.tpl.js" data-semver="v2.3.8"></script>
+    <script src="//mgcrea.github.io/angular-strap/docs/angular-strap.docs.tpl.js" data-semver="v2.3.8"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="controller.js"></script>
+    <title>Homework</title>
+
+</head>
+<body>
+
+
+<div class="jumbotron" style="alignment: left" ng-controller="AppCtrl">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"style="font-size: large">Student Assignments</a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!--<div class="jumbotron" >-->
+        <div  class="container" >
+
+            <div class="row">
+                <main ui-view></main>
+                <!--This is for the list group which shows the assignment and due date-->
+                <div class="col-2">
+                    <div class="list-group"  ng-repeat="details in info ">
+                        <a href="#" ng-click="update(details.id,details.creator.id,details.title,details.due_at,details.description)" class="list-group-item ">
+                            <h4 class="list-group-item-heading">{{details.title}}</h4>
+                            <p class="list-group-item-text">{{details.due_at| date:'longDate'}}</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!--This is for the list group which shows the tabs for assignment details and student submissions-->
+                <div class="col-8">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist" style="font-size: medium ">
+
+                        <li ng-class="{ active: isSet(1) }" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-expanded="true">
+                            <a href ng-click="setTab(1)">Assignment</a>
+                        </li>
+                        <li ng-class="{ active: isSet(2) }" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">
+                            <a href ng-click="setTab(2)">Submissions</a>
+                        </li>
+
+                        <!--<li class="nav-item">-->
+                            <!--<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-expanded="true">Assignment</a>-->
+
+                        <!--</li>-->
+
+                        <!--<li class="nav-item">-->
+                            <!--<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">Submission</a>-->
+                        <!--</li>-->
+
+                    </ul>
+
+                     <!--This shows the name for assignment along with description and due date-->
+                    <div class="tab-content" id="myTabContent"  ng-repeat="details in detailsObject">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" >
+                            <div>
+                                <h1> {{details.title}}
+
+                                </h1>
+                            </div>
+                            <h2>Due date: {{details.due| date:'longDate'}}</h2>
+                            <p>{{details.description}}</p>
+                            </div>
+
+                        <!--This shows student submissons for the selected assignment in the navtab as Collapsible -->
+                        <div class="tab-pane fade " id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="bs-docs-section" ng-controller="CollapseCtrl">
+
+                                <!--<div class="Student" append-source>-->
+                                    <!-- ngModel is optional -->
+
+                                <!--This shows the assignments with student name, submitted date and student avatar
+                                as a panel which can be expanded on click-->
+                                    <div class="panel-group" ng-model="panels.activePanel" role="tablist" aria-multiselectable="true" bs-collapse>
+                                        <div class="panel panel-default" ng-repeat="panel in panels">
+                                            <div class="panel-heading" role="tab">
+                                                <h4 class="panel-title">
+                                                    <a bs-collapse-toggle>
+                                                        <div class="row">
+                                                            <div class="col-2">
+                                                                <img src="{{ panel.creator.avatars.large }}" width="100" height="100">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                {{ panel.creator.first_name }}&nbsp {{ panel.creator.last_name }}
+                                                                <br>
+                                                                Submitted at: {{ panel.submitted_at| date:'longDate' }}
+
+                                                            </div>
+                                                        </div>
+
+                                                        </a>
+                                                </h4>
+                                            </div>
+                                            <div class="panel-collapse" role="tabpanel" bs-collapse-target>
+                                                <div class="panel-body" style="font-size: medium">
+                                                    {{ panel.content }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!--</div>-->
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    <!--</div>-->
+
+</div>
+
+
+
+</body>
+</html>
