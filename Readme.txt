@@ -10,3 +10,5 @@ Steps for running on local machine.
    - express will be installed 
 3) type "node app.js" from the same root folder.
 4) site can be accessed using "localhost:3002"
+
+Fixed the routes in the URL file. Please click on the student name twice to open the assignment due a href taking priority over ng-click

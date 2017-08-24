@@ -1,62 +1,51 @@
 
 var app = angular.module('myApp',['ngRoute','ngAnimate', 'ngSanitize', 'mgcrea.ngStrap']);
-var data =[];
 var assignmentDetails=[];
-var info ={};
+var data ={};
 
-/*app.config(function($routeProvider) {
+app.config(function($routeProvider) {
     $routeProvider
 
-    // route for the home page
+        // route for the home page
         .when('/', {
             templateUrl : 'index.html',
             controller  : 'AppCtrl'
         })
 
-        // route for the about page
-        .when('/home', {
-            template : '<h1>cdcd</h1>',
-            controller  : 'CollapseCtrl'
+        // route for the assignments page
+        .when('/assignments', {
+            templateUrl : 'assignments.html'
         })
 
-});*/
+        // route for the submissions page
+        .when('/assignments/submission', {
+            templateUrl : 'assignments.html'
+
+        })
+
+});
 
 app.controller('AppCtrl',['$scope','$http',
     function ($scope,$http) {
-        // console.log("hello");
-
-        // get request for getting information on assignment objects
 
         $http.get("https://api.edmodo.com/assignments?access_token=12e7eaf1625004b7341b6d681fa3a7c1c551b5300cf7f7f3a02010e99c84695d")
             .then(function(response) {
-               data= $scope.info = response.data;
 
-               for(var i=0;i<data.length;i++){
-                    console.log($scope.info[i].id);
-                }
+                 $scope.info = response.data;
 
             });
+        $scope.update = function (details) {
+            console.log("inside");
 
-//        refresh();
+         console.log("in click " +details.id)  ;
 
-        // update function for updation of tabs
-        $scope.update = function (id,creator_id,title,due,details) {
-
-         // console.log(title+" "+due+" "+details);
-         // console.log("in click " +id+" "+creator_id)  ;
-
-            $http.get("https://api.edmodo.com/assignment_submissions?assignment_id="+id+"&assignment_creator_id"
-                +creator_id+"&access_token=12e7eaf1625004b7341b6d681fa3a7c1c551b5300cf7f7f3a02010e99c84695d")
+            $http.get("https://api.edmodo.com/assignment_submissions?assignment_id="+details.id+"&assignment_creator_id"
+                +details.creator.id+"&access_token=12e7eaf1625004b7341b6d681fa3a7c1c551b5300cf7f7f3a02010e99c84695d")
                 .then(function(response) {
-                 info =   $scope.assignmentInfo = response.data;
-
-                    // for(var i=0;i<$scope.assignmentInfo.length;i++){
-                    //     console.log($scope.assignmentInfo[i]);
-                    // }
-
+                    $scope.panels =  $scope.assignmentInfo = response.data;
                 });
 
-            assignmentDetails = [{title:title ,description:details,due:due}];
+            assignmentDetails = [{title:details.title ,description:details.description,due:details.due_at}];
 
             $scope.detailsObject =assignmentDetails;
 
@@ -73,24 +62,5 @@ app.controller('AppCtrl',['$scope','$http',
 
         };
 
+
     }])
-
-
-//angular.module('mgcrea.ngStrapDocs')
-
-app.controller('CollapseCtrl', function($scope) {
-
-    // for(var i=0;i<info.length;i++){
-    //     console.log(info[i]);
-    // }
-        $scope.panels = info;
-
-        // $scope.panels.activePanel = 2;
-
-        // $scope.multiplePanels = {
-        //     activePanels: [0,1]
-        // };
-
-
-    });
-
